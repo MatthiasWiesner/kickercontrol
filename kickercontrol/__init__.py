@@ -79,10 +79,10 @@ def stats():
 
         if g.teamA_result > g.teamB_result:
             players[g.teamA_backend]['won'] += 1
-            players[g.teamA_frontend]['score'] += 1
+            players[g.teamA_frontend]['won'] += 1
         else:
             players[g.teamB_backend]['won'] += 1
-            players[g.teamB_frontend]['score'] += 1
+            players[g.teamB_frontend]['won'] += 1
 
         players[g.teamA_backend]['score'] += g.teamA_result
         players[g.teamA_frontend]['score'] += g.teamA_result
