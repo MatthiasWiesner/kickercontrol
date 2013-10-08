@@ -6,13 +6,16 @@
 {% if current_user.is_anonymous() %}
 You are not logged in.
 {% else %}
-<table id="stats">
+<table class="table table-bordered table-striped">
+    <thead>
 	<tr>
 		<th>Name</th>
 		<th>Score</th>
 		<th>total games count</th>
 		<th>won games</th>
 	</tr>
+	</thead>
+	<tbody>
   {% for player in players %}
     <tr>
         <td>{{ player[1]['username'] }}</td>
@@ -21,6 +24,7 @@ You are not logged in.
         <td>{{ player[1]['won'] }}</td>
     </tr>
   {% endfor %}
+  </tbody>
 </table>
 {% endif %}
 </p>

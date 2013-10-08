@@ -16,7 +16,7 @@ class SignupForm(Form):
 
 class GameForm(Form):
     teamA_result = IntegerField('Team A result', validators=[Required(), NumberRange(min=1, max=10)])
-    teamB_result = IntegerField('Team A result', validators=[Required(), NumberRange(min=1, max=10)])
+    teamB_result = IntegerField('Team B result', validators=[Required(), NumberRange(min=1, max=10)])
     teamA_frontend = SelectField('Team A frontend', coerce=int)
     teamA_backend = SelectField('Team A backend', coerce=int)
     teamB_frontend = SelectField('Team B frontend', coerce=int)
