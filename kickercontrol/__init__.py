@@ -70,7 +70,7 @@ def stats():
     for g in games:
         for uid in [g.teamA_backend, g.teamA_frontend, g.teamB_backend, g.teamB_frontend]:
             if uid not in players:
-                players[uid] = {'username': User.query.get(uid).username, 'score': 0, 'won': 0, 'total': 0}
+                players[uid] = {'username': User.query.get(uid).username, 'score': 0, 'received': 0, 'won': 0, 'total': 0}
 
         players[g.teamA_backend]['total'] += 1
         players[g.teamA_frontend]['total'] += 1
@@ -88,9 +88,17 @@ def stats():
         players[g.teamA_frontend]['score'] += g.teamA_result
         players[g.teamB_backend]['score'] += g.teamB_result
         players[g.teamB_frontend]['score'] += g.teamB_result
+        
+        players[g.teamA_backend]['received'] += g.teamB_result
+        players[g.teamA_frontend]['received'] += g.teamB_result
+        players[g.teamB_backend]['received'] += g.teamA_result
+        players[g.teamB_frontend]['received'] += g.teamA_result
 
-    players = sorted(players.items(), key=lambda x: x[1])
-    players.reverse()
+    order = str(request.args.get('order', 'score'))
+    reverse = bool(request.args.get('reverse', 'False'))
+    print reverse
+
+    players = sorted(players.values(), key=lambda x: x[order], reverse=reverse)
     return render_template('stats.jinja', players=players)
 
 
@@ -118,6 +126,7 @@ def game():
             int(form.teamA_backend.data),
             int(form.teamB_frontend.data),
             int(form.teamB_backend.data))
+        flash('Game saved!', 'success')
 
     return render_template('game.jinja', form=form)
 

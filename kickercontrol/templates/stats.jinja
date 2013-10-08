@@ -9,8 +9,18 @@ You are not logged in.
 <table class="table table-bordered table-striped">
     <thead>
 	<tr>
-		<th>Name</th>
-		<th>Score</th>
+		<th><a href="{{ url_for('stats', order="username") }}">Name</a>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="username", reverse="") }}">&#x25B2;</a></div>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="username", reverse="True") }}">&#x25BC;</a></div>
+		</th>
+		<th><a href="{{ url_for('stats', order="score") }}">Score</a>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="score", reverse="") }}">&#x25B2;</a></div>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="score", reverse="True") }}">&#x25BC;</a></div>
+		</th>
+		<th><a href="{{ url_for('stats', order="received") }}">Received</a>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="received", reverse="") }}">&#x25B2;</a></div>
+		    <div style="float:right;"><a href="{{ url_for('stats', order="received", reverse="True") }}">&#x25BC;</a></div>
+		</th>
 		<th>total games count</th>
 		<th>won games</th>
 	</tr>
@@ -18,10 +28,11 @@ You are not logged in.
 	<tbody>
   {% for player in players %}
     <tr>
-        <td>{{ player[1]['username'] }}</td>
-        <td>{{ player[1]['score'] }}</td>
-        <td>{{ player[1]['total'] }}</td>
-        <td>{{ player[1]['won'] }}</td>
+        <td>{{ player['username'] }}</td>
+        <td>{{ player['score'] }}</td>
+        <td>{{ player['received'] }}</td>
+        <td>{{ player['total'] }}</td>
+        <td>{{ player['won'] }}</td>
     </tr>
   {% endfor %}
   </tbody>
