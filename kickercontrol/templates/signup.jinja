@@ -1,0 +1,21 @@
+{% extends 'layout.jinja' %}
+{% from 'macros.jinja' import with_errors %}
+
+{% block title %}Signup{% endblock %}
+{% block content %}
+<form class=form-horizontal action="{{ url_for('signup', next=request.args.get('next')) }}" method=post>
+  {{ form.hidden_tag() }}
+  {{ with_errors(form.username, placeholder='Username') }}
+  {{ with_errors(form.email, placeholder='Email') }}
+  {{ with_errors(form.password, placeholder='Password') }}
+  {{ with_errors(form.password_confirm, placeholder='Password Confirmation') }}
+  <div class=control-group>
+    <div class=controls>
+      <label class=checkbox>
+        <input type=checkbox name=remember> Remember me
+      </label>
+      <button type=submit class="btn btn-primary">Signup</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

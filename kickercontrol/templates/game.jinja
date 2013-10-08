@@ -1,0 +1,23 @@
+{% extends 'layout.jinja' %}
+{% from 'macros.jinja' import with_errors %}
+
+{% block title %}Restricted Area{% endblock %}
+{% block content %}
+<form class=form-horizontal action="{{ url_for('game', next=request.args.get('next')) }}" method=post>
+  {{ form.hidden_tag() }}
+  {{ with_errors(form.teamA_result, placeholder='0') }}
+  {{ with_errors(form.teamB_result, placeholder='0') }}
+  
+  <table>
+  	<tr><td>&nbsp;</td><td>TEAM A</td><td>TEAM B</td><td>&nbsp;</td></tr>
+  	<tr><td>backend</td><td>{{ form.teamA_backend }}</td><td>{{ form.teamB_frontend }}</td><td>frontend</td></tr>
+  	<tr><td>frontend</td><td>{{ form.teamA_frontend }}</td><td>{{ form.teamB_backend }}</td><td>backend</td></tr>
+  </table>
+  
+  <div class=control-group>
+    <div class=controls>
+      <button type=submit class="btn btn-primary">New</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

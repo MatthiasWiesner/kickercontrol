@@ -1,0 +1,12 @@
+table, td, th {
+	border:1px solid silver;
+}
+th {
+	background-color:silver;
+	color:white;
+}
+th, td {
+	padding: 3px;
+}
+
+table#stats { width: 415px; }
