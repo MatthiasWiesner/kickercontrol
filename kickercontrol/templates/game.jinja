@@ -8,12 +8,20 @@
   {{ with_errors(form.teamA_result, placeholder='0') }}
   {{ with_errors(form.teamB_result, placeholder='0') }}
   
-  <table>
-  	<tr><td>&nbsp;</td><td>TEAM A</td><td>TEAM B</td><td>&nbsp;</td></tr>
-  	<tr><td>backend</td><td>{{ form.teamA_backend }}</td><td>{{ form.teamB_frontend }}</td><td>frontend</td></tr>
-  	<tr><td>frontend</td><td>{{ form.teamA_frontend }}</td><td>{{ form.teamB_backend }}</td><td>backend</td></tr>
-  </table>
-  
+  <div class=control-group>
+    <label class="control-label">Team player</label>
+    <div class=controls>
+	  <table class="table table-bordered table-striped">
+	    <thead>
+	  		<tr><th>&nbsp;</th><th>TEAM A</th><th>TEAM B</th><th>&nbsp;</th></tr>
+	  	</thead>
+	  	<tbody>
+	  	<tr><td>backend</td><td>{{ form.teamA_backend }}</td><td>{{ form.teamB_frontend }}</td><td>frontend</td></tr>
+	  	<tr><td>frontend</td><td>{{ form.teamA_frontend }}</td><td>{{ form.teamB_backend }}</td><td>backend</td></tr>
+	  	</tbody>
+	  </table>
+    </div>
+  </div>
   <div class=control-group>
     <div class=controls>
       <button type=submit class="btn btn-primary">New</button>
