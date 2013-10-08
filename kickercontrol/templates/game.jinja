@@ -1,7 +1,7 @@
 {% extends 'layout.jinja' %}
 {% from 'macros.jinja' import with_errors %}
 
-{% block title %}Restricted Area{% endblock %}
+{% block title %}New Game Page{% endblock %}
 {% block content %}
 <form class=form-horizontal action="{{ url_for('game', next=request.args.get('next')) }}" method=post>
   {{ form.hidden_tag() }}
