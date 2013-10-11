@@ -2,6 +2,9 @@ from functools import update_wrapper
 
 from flask import current_app, abort
 from flask.ext.login import current_user
+from itsdangerous import URLSafeTimedSerializer
+from .config import SECRET_KEY
+login_serializer = URLSafeTimedSerializer(SECRET_KEY)
 
 
 def authorized(checker):

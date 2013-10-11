@@ -15,29 +15,6 @@ def init_engine(db_uri):
     db_session.configure(bind=db_engine)
 
 
-def add_user(username, email, password):
-    u = User(username=username, email=email, password=password)
-    db_session.add(u)
-    db_session.commit()
-    return u
-
-
-def add_game(teamA_result,
-             teamB_result,
-             teamA_frontend,
-             teamA_backend,
-             teamB_frontend,
-             teamB_backend):
-    g = Game(teamA_result=teamA_result,
-            teamB_result=teamB_result,
-            teamA_frontend=teamA_frontend,
-            teamA_backend=teamA_backend,
-            teamB_frontend=teamB_frontend,
-            teamB_backend=teamB_backend)
-    db_session.add(g)
-    db_session.commit()
-
-
 def init_db():
     Base.metadata.create_all(bind=db_engine)
 
@@ -92,15 +69,15 @@ class User(UserMixin, Base):
 class Game(Base):
     __tablename__ = 'games'
     id = Column(Integer, primary_key=True)
-    teamA_result = Column(Integer, default=0)
-    teamB_result = Column(Integer, default=0)
+    teamBlack_result = Column(Integer, default=0)
+    teamRed_result = Column(Integer, default=0)
     
-    teamA_frontend = Column(Integer, ForeignKey('users.id'))
-    teamA_backend = Column(Integer, ForeignKey('users.id'))
-    teamB_frontend = Column(Integer, ForeignKey('users.id'))
-    teamB_backend = Column(Integer, ForeignKey('users.id'))
+    teamBlack_frontend = Column(Integer, ForeignKey('users.id'))
+    teamBlack_backend = Column(Integer, ForeignKey('users.id'))
+    teamRed_frontend = Column(Integer, ForeignKey('users.id'))
+    teamRed_backend = Column(Integer, ForeignKey('users.id'))
 
-    teamA_frontend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamA_frontend")
-    teamA_backend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamA_backend")
-    teamB_frontend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamB_frontend")
-    teamB_backend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamB_backend")
+    teamBlack_frontend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamBlack_frontend")
+    teamBlack_backend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamBlack_backend")
+    teamRed_frontend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamRed_frontend")
+    teamRed_backend_rel = relationship("User", foreign_keys="[User.id]", primaryjoin="User.id==Game.teamRed_backend")

@@ -1,0 +1,42 @@
+ul { margin:0px; margin-top:10px; padding:0px; text-align: center; }
+ul#player>li {
+	list-style-type: none;
+	border: 1px solid black;
+	margin-bottom: 2px;
+	width: 200px;
+	cursor: pointer;
+}
+
+ul#spielfeld>li {
+	list-style-type: none;
+	height: 40px;
+	width: 200px;
+	border: 1px solid black;
+	font-weight: bold;
+	
+}
+ul#spielfeld>li.red {
+	background: #FCC;
+}
+
+ul#spielfeld>li.black {
+	background: #CCC;
+}
+
+ul#spielfeld>li.black.back {
+	float: left;
+}
+
+ul#spielfeld>li.red.front {
+	margin-left: 220px;
+}
+
+ul#spielfeld>li.black.front {
+	margin-top: 20px;
+	float: left;
+}
+
+ul#spielfeld>li.red.back {
+	margin-top: 20px;
+	margin-left: 220px;
+}

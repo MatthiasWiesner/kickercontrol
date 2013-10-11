@@ -5,21 +5,21 @@
 {% block content %}
 <form class=form-horizontal action="{{ url_for('game', next=request.args.get('next')) }}" method=post>
   {{ form.hidden_tag() }}
-  {{ with_errors(form.teamA_result, placeholder='0') }}
-  {{ with_errors(form.teamB_result, placeholder='0') }}
-  
+  {{ with_errors(form.teamBlack_result, placeholder='0') }}
+  {{ with_errors(form.teamRed_result, placeholder='0') }}
   <div class=control-group>
     <label class="control-label">Team player</label>
-    <div class=controls>
-	  <table class="table table-bordered table-striped">
-	    <thead>
-	  		<tr><th>&nbsp;</th><th>TEAM A</th><th>TEAM B</th><th>&nbsp;</th></tr>
-	  	</thead>
-	  	<tbody>
-	  	<tr><td>backend</td><td>{{ form.teamA_backend }}</td><td>{{ form.teamB_frontend }}</td><td>frontend</td></tr>
-	  	<tr><td>frontend</td><td>{{ form.teamA_frontend }}</td><td>{{ form.teamB_backend }}</td><td>backend</td></tr>
-	  	</tbody>
-	  </table>
+    <div class=controls>  
+	  <ul id="player">
+	  {% for user in users %}
+	    <li data-player-id="{{ user[0] }}">{{ user[1] }}</li>
+	  {% endfor %}
+	  <ul id="spielfeld">
+	  	<li data-team-role="teamBlack_backend" class="black back placeholder">BACK</li>
+	  	<li data-team-role="teamRed_frontend" class="red front placeholder">FRONT</li>
+	  	<li data-team-role="teamBlack_frontend" class="black front placeholder">FRONT</li>
+	  	<li data-team-role="teamRed_backend" class="red back placeholder">BACK</li>
+	  </ul>
     </div>
   </div>
   <div class=control-group>

@@ -1,42 +1,28 @@
 import os
-from datetime import timedelta
-
 from flask import (Flask,
                    render_template,
                    request,redirect,
                    url_for, flash,
                    session,
                    send_from_directory)
-
 from flask.ext.login import (LoginManager,
                              login_user,
                              logout_user,
                              current_user,
                              login_required)
-
-from .model import (User,
-                    Game,
-                    init_engine,
-                    db_session,
-                    add_user,
-                    add_game)
-
-from .forms import (LoginForm,
-                    SignupForm,
-                    GameForm)
-
+from .model import User, Game, init_engine, db_session
+from .forms import LoginForm, SignupForm, GameForm
 from .auth import (authorized,
                    require,
                    IsUser,
-                   Any)
-
-DB_URI = 'sqlite:///users.db'
-DEBUG = True
-SECRET_KEY = 'foobarbaz'
-PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
+                   Any,
+                   login_serializer)
+from itsdangerous import constant_time_compare, BadData
+from hashlib import sha1
+from . import config
 
 app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_object(config)
 app.jinja_env.globals['authorized'] = authorized
 
 login_manager = LoginManager()
@@ -45,10 +31,7 @@ login_manager.init_app(app)
 
 init_engine(app.config['DB_URI'])
 
-
-@app.errorhandler(403)
-def forbidden_403(exception):
-    return render_template('forbidden.jinja'), 403
+import kickit
 
 
 @app.route('/favicon.ico')
@@ -62,75 +45,6 @@ def index():
     return render_template('index.jinja')
 
 
-@app.route('/stats')
-@login_required
-def stats():
-    games = Game.query.all()
-    players = {}
-    for g in games:
-        for uid in [g.teamA_backend, g.teamA_frontend, g.teamB_backend, g.teamB_frontend]:
-            if uid not in players:
-                players[uid] = {'username': User.query.get(uid).username, 'score': 0, 'received': 0, 'won': 0, 'total': 0}
-
-        players[g.teamA_backend]['total'] += 1
-        players[g.teamA_frontend]['total'] += 1
-        players[g.teamB_backend]['total'] += 1
-        players[g.teamB_frontend]['total'] += 1
-
-        if g.teamA_result > g.teamB_result:
-            players[g.teamA_backend]['won'] += 1
-            players[g.teamA_frontend]['won'] += 1
-        else:
-            players[g.teamB_backend]['won'] += 1
-            players[g.teamB_frontend]['won'] += 1
-
-        players[g.teamA_backend]['score'] += g.teamA_result
-        players[g.teamA_frontend]['score'] += g.teamA_result
-        players[g.teamB_backend]['score'] += g.teamB_result
-        players[g.teamB_frontend]['score'] += g.teamB_result
-        
-        players[g.teamA_backend]['received'] += g.teamB_result
-        players[g.teamA_frontend]['received'] += g.teamB_result
-        players[g.teamB_backend]['received'] += g.teamA_result
-        players[g.teamB_frontend]['received'] += g.teamA_result
-
-    order = str(request.args.get('order', 'score'))
-    reverse = bool(request.args.get('reverse', 'False'))
-    print reverse
-
-    players = sorted(players.values(), key=lambda x: x[order], reverse=reverse)
-    return render_template('stats.jinja', players=players)
-
-
-@app.route('/game', methods=['GET', 'POST'])
-@login_required
-def game():
-    form = GameForm()
-
-    users = [[u.id, u.username] for u in User.query.all()]
-    form.teamA_frontend.choices = users
-    form.teamA_backend.choices = users
-    form.teamB_frontend.choices = users
-    form.teamB_backend.choices = users
-
-    if form.validate_on_submit():
-        if len(set([int(form.teamA_frontend.data),
-                int(form.teamA_backend.data),
-                int(form.teamB_frontend.data),
-                int(form.teamB_backend.data)])) < 4:
-            flash('Doubled player!', 'error')
-
-        add_game(int(form.teamA_result.data),
-            int(form.teamB_result.data),
-            int(form.teamA_frontend.data),
-            int(form.teamA_backend.data),
-            int(form.teamB_frontend.data),
-            int(form.teamB_backend.data))
-        flash('Game saved!', 'success')
-
-    return render_template('game.jinja', form=form)
-
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated():
@@ -141,7 +55,9 @@ def signup():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None:
             if form.password.data == form.password_confirm.data:
-                user = add_user(form.username.data, form.email.data, form.password.data)
+                user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+                db_session.add(user)
+                db_session.commit()
                 if login_user(user, remember=form.remember.data):
                     # Enable session expiration only if user hasn't chosen to be
                     # remembered.
@@ -192,6 +108,27 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
+@login_manager.token_loader
+def load_token(token):
+    try:
+        max_age = app.config['REMEMBER_COOKIE_DURATION'].total_seconds()
+        user_id, hash_a = login_serializer.loads(token, max_age=max_age)
+    except BadData:
+        return None
+    user = User.query.get(user_id)
+    if user is not None:
+        hash_a = hash_a.encode('utf-8')
+        hash_b = sha1(user.password).hexdigest()
+        if constant_time_compare(hash_a, hash_b):
+            return user
+    return None
+
+
 @app.teardown_request
 def remove_db_session(exception=None):
     db_session.remove()
+
+
+@app.errorhandler(403)
+def forbidden_403(exception):
+    return render_template('forbidden.jinja'), 403

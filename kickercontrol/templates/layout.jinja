@@ -4,6 +4,7 @@
 <title>{% block title %}{% endblock %}</title>
 <link rel=stylesheet media=screen href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 <link rel=stylesheet media=screen href="{{ url_for('static', filename='css/custom.css') }}">
+<link rel=stylesheet media=screen href="{{ url_for('static', filename='css/no-theme/jquery-ui-1.10.3.custom.min.css') }}">
 
 <div class=container>
   <div class=navbar>
@@ -41,4 +42,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/jquery-1.8.3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui-1.10.3.custom.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kickit.js') }}"></script>
