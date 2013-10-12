@@ -31,7 +31,7 @@ login_manager.init_app(app)
 
 init_engine(app.config['DB_URI'])
 
-import kickit
+from . import kickit
 
 
 @app.route('/favicon.ico')

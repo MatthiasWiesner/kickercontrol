@@ -9,11 +9,12 @@
   {{ with_errors(form.teamRed_result, placeholder='0') }}
   <div class=control-group>
     <label class="control-label">Team player</label>
-    <div class=controls>  
-	  <ul id="player">
-	  {% for user in users %}
-	    <li data-player-id="{{ user[0] }}">{{ user[1] }}</li>
-	  {% endfor %}
+    <div id="player_field" class=controls>  
+      <ul id="player">
+      {% for user in users %}
+        <li data-player-id="{{ user[0] }}">{{ user[1] }}</li>
+      {% endfor %}
+      </ul>
 	  <ul id="spielfeld">
 	  	<li data-team-role="teamBlack_backend" class="black back placeholder">BACK</li>
 	  	<li data-team-role="teamRed_frontend" class="red front placeholder">FRONT</li>
@@ -28,4 +29,5 @@
     </div>
   </div>
 </form>
+
 {% endblock %}

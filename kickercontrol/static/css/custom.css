@@ -40,3 +40,10 @@ ul#spielfeld>li.red.back {
 	margin-top: 20px;
 	margin-left: 220px;
 }
+
+.scrollable {
+	position: relative;
+	overflow: hidden;
+	width: 204px;
+	height: 120px;
+}
