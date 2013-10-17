@@ -63,6 +63,16 @@ def game():
             flash('Doubled player!', 'error')
             return render_template('game.jinja', form=form)
 
+        if int(form.teamBlack_result.data) < 10 \
+            and int(form.teamRed_result.data) < 10:
+            flash('No winner!', 'error')
+            return render_template('game.jinja', form=form)
+
+        if int(form.teamBlack_result.data) == 10 \
+            and int(form.teamRed_result.data) == 10:
+            flash('Only one team wins!', 'error')
+            return render_template('game.jinja', form=form)
+
         game = Game(teamBlack_result=int(form.teamBlack_result.data),
                     teamRed_result=int(form.teamRed_result.data),
                     teamBlack_frontend=int(form.teamBlack_frontend.data),

@@ -5,23 +5,79 @@
 {% block content %}
 <form class=form-horizontal action="{{ url_for('game', next=request.args.get('next')) }}" method=post>
   {{ form.hidden_tag() }}
-  {{ with_errors(form.teamBlack_result, placeholder='0') }}
-  {{ with_errors(form.teamRed_result, placeholder='0') }}
   <div class=control-group>
     <label class="control-label">Team player</label>
-    <div id="player_field" class=controls>  
-      <ul id="player">
-      {% for user in users %}
+    <div id="player_field" class=controls>
+	  <ul id="player">
+	  {% for user in users %}
         <li data-player-id="{{ user[0] }}">{{ user[1] }}</li>
-      {% endfor %}
-      </ul>
+	  {% endfor %}
+	  </ul>
 	  <ul id="spielfeld">
-	  	<li data-team-role="teamBlack_backend" class="black back placeholder">BACK</li>
-	  	<li data-team-role="teamRed_frontend" class="red front placeholder">FRONT</li>
-	  	<li data-team-role="teamBlack_frontend" class="black front placeholder">FRONT</li>
-	  	<li data-team-role="teamRed_backend" class="red back placeholder">BACK</li>
+	  	<li data-team-role="teamBlack_backend" class="black back placeholder">BACK
+	  	{% if form.teamBlack_backend.errors %}
+	  	  <div><span class=text-error>{{ form.teamBlack_backend.errors[0] }}</span></div>
+	  	{% endif %}
+	  	</li>
+	  	<li data-team-role="teamRed_frontend" class="red front placeholder">FRONT
+	  	{% if form.teamRed_frontend.errors %}
+	  	  <div><span class=text-error>{{ form.teamRed_frontend.errors[0] }}</span></div>
+	  	{% endif %}
+	  	</li>
+	  	<li data-team-role="teamBlack_frontend" class="black front placeholder">FRONT
+	  	{% if form.teamBlack_frontend.errors %}
+	  	  <div><span class=text-error>{{ form.teamBlack_frontend.errors[0] }}</span></div>
+	  	{% endif %}
+	  	</li>
+	  	<li data-team-role="teamRed_backend" class="red back placeholder">BACK
+	  	{% if form.teamRed_backend.errors %}
+	  	  <div><span class=text-error>{{ form.teamRed_backend.errors[0] }}</span></div>
+	  	{% endif %}
+	  	</li>
 	  </ul>
     </div>
+  </div>
+  <div class=control-group>
+  	<label class="control-label">Team Black result</label>
+    <div class=controls>
+	  <div class="slider-code control-label">
+	    <a class="buttons prev" href="#">less</a>
+	    <div class="viewport">
+	        <ul class="overview">
+	       {% for i in range(1,11) %}
+	         <li data-team-role="teamBlack_result">{{ i }}</li>
+	       {% endfor %}
+	        </ul>
+	    </div>
+	    <a class="buttons next" href="#">more</a>
+	  </div>
+	  {% if form.teamBlack_result.errors %}
+      {% for error in form.teamBlack_result.errors %}
+      <div style="clear:both;"><span class=text-error>{{ error }}</span></div>
+      {% endfor %}
+      {% endif %}
+	</div>
+  </div>
+  <div class=control-group>
+  	<label class="control-label">Team Red result</label>
+    <div class=controls>
+	  <div class="slider-code control-label">
+	    <a class="buttons prev" href="#">less</a>
+	    <div class="viewport">
+	        <ul class="overview">
+	       {% for i in range(1,11) %}
+	         <li data-team-role="teamRed_result">{{ i }}</li>
+	       {% endfor %}
+	        </ul>
+	    </div>
+	    <a class="buttons next" href="#">more</a>
+	  </div>
+	  {% if form.teamRed_result.errors %}
+	  {% for error in form.teamRed_result.errors %}
+	  <div style="clear:both;"><span class=text-error>{{ error }}</span></div>
+	  {% endfor %}
+	  {% endif %}
+	</div>
   </div>
   <div class=control-group>
     <div class=controls>

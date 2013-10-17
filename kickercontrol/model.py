@@ -1,9 +1,10 @@
+from hashlib import sha1
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 from flask.ext.login import UserMixin
 from .hash_passwords import check_hash, make_hash
-
+from .auth import login_serializer
 
 db_engine = None
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False))
@@ -44,6 +45,10 @@ class User(UserMixin, Base):
     email = Column(Text, nullable=False, unique=True)
     _password = Column('password', Text, nullable=False)
     active = Column(Boolean, nullable=False, default=True)
+
+    def get_auth_token(self):
+        data = (self.id, sha1(self.password).hexdigest())
+        return login_serializer.dumps(data)
 
     def _set_password(self, password):
         self._password = make_hash(password)
