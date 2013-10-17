@@ -23,5 +23,3 @@ $('.slider-code').tinycarousel({
     	$(selector).val(li.text());
 	}
 });
-
-$()

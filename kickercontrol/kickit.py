@@ -89,5 +89,6 @@ def game():
 @login_required
 def reset():
     Game.query.delete()
+    db_session.commit()
     flash('Game table resetted!', 'success')
-    return redirect(url_for('/game'))
+    return redirect(url_for('game'))
